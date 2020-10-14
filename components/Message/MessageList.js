@@ -11,10 +11,17 @@ import PropTypes from 'prop-types';
 import MapView from 'react-native-maps';
 
 import {MessageShape} from '../../utils/messaging/MessageUtils';
+import {
+  widthPercentageToDP,
+  heightPercentageToDP,
+  responsiveFontSize,
+} from '../../utils';
 
-const MessageList = ({messages, onPressMessage}) => {
+const MessageList = ({messages, onPressMessage, onLongPressEachMessage}) => {
   const keyExtractor = (item) => item.id.toString();
-  const renderMessageBody = ({type, text, uri, coordinate}) => {
+  const renderMessageBody = (item) => {
+    const {type, text, uri, coordinate} = item;
+
     switch (type) {
       case 'text':
         return (
@@ -48,7 +55,12 @@ const MessageList = ({messages, onPressMessage}) => {
 
     return (
       <View style={styles.messageRow}>
-        <TouchableOpacity onPress={handlePresMessage}>
+        <TouchableOpacity
+          onPress={handlePresMessage}
+          activeOpacity={0.8}
+          onLongPress={() => {
+            console.log('vu thanhe Hie');
+          }}>
           {renderMessageBody(item)}
         </TouchableOpacity>
       </View>
@@ -80,28 +92,28 @@ const styles = StyleSheet.create({
   messageRow: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginBottom: 4,
-    marginRight: 10,
-    marginLeft: 60,
+    marginBottom: heightPercentageToDP(1.2),
+    marginRight: widthPercentageToDP(3),
+    marginLeft: widthPercentageToDP(9),
   },
   messageBubble: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: heightPercentageToDP(1.5),
+    paddingHorizontal: widthPercentageToDP(3),
     backgroundColor: 'rgb(16,135,255)',
     borderRadius: 20,
   },
   text: {
-    fontSize: 18,
+    fontSize: responsiveFontSize(2),
     color: 'white',
   },
   image: {
-    width: 150,
-    height: 150,
+    width: widthPercentageToDP(40),
+    height: widthPercentageToDP(40),
     borderRadius: 10,
   },
   map: {
-    width: 250,
-    height: 250,
+    width: widthPercentageToDP(60),
+    height: widthPercentageToDP(60),
     borderRadius: 10,
   },
 });

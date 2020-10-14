@@ -1477,6 +1477,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz#e42b1bef12d2415411519fd528e64b593b1363dc"
   integrity sha512-W/J0fNYVO01tioHjvYWQ9m6RgndVtbElzYozBq1ZPrHO/iCzlqoySHl4gO/fpCl9QEFjvJfjPgtPMTMlsoq5DQ==
 
+"@react-native-community/hooks@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/hooks/-/hooks-2.6.0.tgz#dd5f19601eb3684c6bcdd3df3d0c04cf44c24cff"
+  integrity sha512-emBGKvhJ0h++lLJQ5ejsj+od9G67nEaihjvfSx7/JWvNrQGAhP9U0OZqgb9dkKzor9Ufaj9SGt8RNY97cGzttw==
+
 "@react-native-community/netinfo@^5.9.7":
   version "5.9.7"
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.9.7.tgz#769c6b306ea6bbaa1c4a3fffdd183d0cfc30ed7e"
@@ -6508,6 +6513,13 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-animatable@1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.3.tgz#a13a4af8258e3bb14d0a9d839917e9bb9274ec8a"
+  integrity sha512-2ckIxZQAsvWn25Ho+DK3d1mXIgj7tITkrS4pYDvx96WyOttSvzzFeQnM2od0+FUMzILbdHDsDEqZvnz1DYNQ1w==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-get-random-values@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.5.0.tgz#91cda18f0e66e3d9d7660ba80c61c914030c1e05"
@@ -6519,6 +6531,14 @@ react-native-maps@^0.27.1:
   version "0.27.1"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.27.1.tgz#2f10cd417bb2fd938c9e015b1c9b6d9b1a44b97f"
   integrity sha512-HygBkZBecTnIVRYrSiLRAvu4OmXOYso/A7c6Cy73HkOh9CgGV8Ap5eBea24tvmFGptjj5Hg8AJ94/YbmWK1Okw==
+
+react-native-modal@^11.5.6:
+  version "11.5.6"
+  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-11.5.6.tgz#bb25a78c35a5e24f45de060e5f64284397d38a87"
+  integrity sha512-APGNfbvgC4hXbJqcSADu79GLoMKIHUmgR3fDQ7rCGZNBypkStSP8imZ4PKK/OzIZZfjGU9aP49jhMgGbhY9KHA==
+  dependencies:
+    prop-types "^15.6.2"
+    react-native-animatable "1.3.3"
 
 react-native-safe-area-context@3.1.4:
   version "3.1.4"

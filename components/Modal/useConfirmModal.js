@@ -1,14 +1,13 @@
 import React from 'react';
 import {useState, useCallback} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Button} from 'react-native';
 import Modal from 'react-native-modal';
 import {
   responsiveFontWidth,
   widthPercentageToDP,
   heightPercentageToDP,
   responsiveFontSize,
-} from '../utils';
-import {Button} from 'react-native-elements';
+} from '../../utils';
 import {useDeviceOrientation} from '@react-native-community/hooks';
 
 export const useConfirmModal = ({

@@ -15,15 +15,22 @@ import {
   createLocationMessage,
   CreateTextMessage,
 } from './utils/messaging/MessageUtils';
+import {useConfirmModal} from './components/Modal/useConfirmModal';
 
 const App = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
 
-  const handleHardwareBackPress = () => {
-    const subcribe = BackHandler.addEventListener('hardwareBackPress', () =>
-      dismissFullScreenImage(subcribe),
-    );
-  };
+  useEffect(() => {
+    const subcribe = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (fullScreenImageUri !== null) {
+        setImageUri(null);
+        return true;
+      }
+      return false;
+    });
+
+    return () => subcribe.remove();
+  }, [fullScreenImageUri]);
 
   const [messages, setMessages] = useState([
     CreateImageMessage('https://unsplash.it/300/300'),
@@ -38,7 +45,6 @@ const App = () => {
   const handlePressMessage = ({uri, type}) => {
     switch (type) {
       case 'image':
-        handleHardwareBackPress();
         setImageUri(uri);
         break;
       default:
@@ -46,13 +52,7 @@ const App = () => {
     }
   };
 
-  const dismissFullScreenImage = (callback) => {
-    callback.remove && callback.remove();
-    setImageUri(null);
-    return true;
-  };
-
-  const closeFullScreenImage = () => {
+  const dismissFullScreenImage = () => {
     setImageUri(null);
   };
 
@@ -65,7 +65,7 @@ const App = () => {
             source={{uri: fullScreenImageUri}}
           />
           <TouchableOpacity
-            onPress={closeFullScreenImage}
+            onPress={dismissFullScreenImage}
             style={styles.closeButton}>
             <MaterialIcons name="close" size={50} color="#ffffff" />
           </TouchableOpacity>
@@ -74,8 +74,11 @@ const App = () => {
     );
   };
 
+  const [Modal, toggleModal] = useConfirmModal({title: 'Vu Thanh Hieu', isDark: true});
+  
   return (
     <>
+      {<Modal />}
       <Status />
       <MessageList messages={messages} onPressMessage={handlePressMessage} />
       {renderFullScreenImage()}
