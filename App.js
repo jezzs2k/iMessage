@@ -16,6 +16,7 @@ import {
   CreateTextMessage,
 } from './utils/messaging/MessageUtils';
 import {useConfirmModal} from './components/Modal/useConfirmModal';
+import {useModalDropList} from './components/Modal/useModalDropList';
 
 const App = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
@@ -74,11 +75,18 @@ const App = () => {
     );
   };
 
-  const [Modal, toggleModal] = useConfirmModal({title: 'Vu Thanh Hieu', isDark: true});
-  
+  const [modal, toggleModal] = useConfirmModal({
+    title: 'Are you sure you want to delete your custom workout?',
+    onTopPress: () => {
+      console.log('Hieu Confirm');
+    },
+    onBottomPress: () => {},
+    isDark: false,
+  });
+
   return (
     <>
-      {<Modal />}
+      {modal}
       <Status />
       <MessageList messages={messages} onPressMessage={handlePressMessage} />
       {renderFullScreenImage()}

@@ -16,32 +16,63 @@ import {
   heightPercentageToDP,
   responsiveFontSize,
 } from '../../utils';
+import {useModalDropList} from '../Modal/useModalDropList';
 
 const MessageList = ({messages, onPressMessage, onLongPressEachMessage}) => {
   const keyExtractor = (item) => item.id.toString();
+  const listDropDown = [
+    {
+      title: 'Edit',
+      onPress: () => {
+        console.log('Edit Message');
+      },
+    },
+    {
+      title: 'Delete',
+      onPress: () => {
+        console.log('Delete Message');
+      },
+    },
+  ];
+
+  const [dropsList, toggleDrop] = useModalDropList({list: listDropDown});
+
   const renderMessageBody = (item) => {
     const {type, text, uri, coordinate} = item;
 
     switch (type) {
       case 'text':
         return (
-          <View style={styles.messageBubble}>
-            <Text style={styles.text}>{text}</Text>
-          </View>
+          <>
+            
+            <View style={styles.messageBubble}>
+              {dropsList}
+              <Text style={styles.text}>{text}</Text>
+            </View>
+          </>
+
         );
       case 'image':
-        return <Image style={styles.image} source={{uri}} />;
+        return (
+          <>
+            {dropsList}
+            <Image style={styles.image} source={{uri}} />
+          </>
+        );
       case 'location':
         return (
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              ...coordinate,
-              latitudeDelta: 0.08,
-              longitudeDelta: 0.04,
-            }}>
-            <MapView.Marker coordinate={coordinate} />
-          </MapView>
+          <>
+            {dropsList}
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                ...coordinate,
+                latitudeDelta: 0.08,
+                longitudeDelta: 0.04,
+              }}>
+              <MapView.Marker coordinate={coordinate} />
+            </MapView>
+          </>
         );
       default:
         return <View />;
@@ -58,9 +89,7 @@ const MessageList = ({messages, onPressMessage, onLongPressEachMessage}) => {
         <TouchableOpacity
           onPress={handlePresMessage}
           activeOpacity={0.8}
-          onLongPress={() => {
-            console.log('vu thanhe Hie');
-          }}>
+          onLongPress={() => toggleDrop()}>
           {renderMessageBody(item)}
         </TouchableOpacity>
       </View>
