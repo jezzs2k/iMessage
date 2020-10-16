@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,53 +17,46 @@ import {
   heightPercentageToDP,
   responsiveFontSize,
 } from '../../utils';
-import {useModalDropList} from '../Modal/useModalDropList';
+import {useActionModal} from '../Modal/useActionModal';
 
-const MessageList = ({messages, onPressMessage, onLongPressEachMessage}) => {
+const MessageList = ({messages, onPressMessage}) => {
   const keyExtractor = (item) => item.id.toString();
-  const listDropDown = [
-    {
-      title: 'Edit',
-      onPress: () => {
-        console.log('Edit Message');
-      },
-    },
-    {
-      title: 'Delete',
-      onPress: () => {
-        console.log('Delete Message');
-      },
-    },
-  ];
 
-  const [dropsList, toggleDrop] = useModalDropList({list: listDropDown});
-
-  const renderMessageBody = (item) => {
+  const renderMessageBody = (item, condition, handlePresMessage) => {
     const {type, text, uri, coordinate} = item;
-
     switch (type) {
       case 'text':
         return (
-          <>
-            
-            <View style={styles.messageBubble}>
-              {dropsList}
+          <TouchableOpacity
+            onPress={handlePresMessage}
+            activeOpacity={0.8}
+            onLongPress={() => toggleModalText(item)}>
+            <View
+              style={[
+                styles.messageBubble,
+                condition === 2
+                  ? styles.messageBubbleReceiver
+                  : styles.messageBubblesender,
+              ]}>
               <Text style={styles.text}>{text}</Text>
             </View>
-          </>
-
+          </TouchableOpacity>
         );
       case 'image':
         return (
-          <>
-            {dropsList}
+          <TouchableOpacity
+            onPress={handlePresMessage}
+            activeOpacity={0.8}
+            onLongPress={() => toggleModalImage(item)}>
             <Image style={styles.image} source={{uri}} />
-          </>
+          </TouchableOpacity>
         );
       case 'location':
         return (
-          <>
-            {dropsList}
+          <TouchableOpacity
+            onPress={handlePresMessage}
+            activeOpacity={0.8}
+            onLongPress={() => toggleModalLocation(item)}>
             <MapView
               style={styles.map}
               initialRegion={{
@@ -72,39 +66,58 @@ const MessageList = ({messages, onPressMessage, onLongPressEachMessage}) => {
               }}>
               <MapView.Marker coordinate={coordinate} />
             </MapView>
-          </>
+          </TouchableOpacity>
         );
       default:
         return <View />;
     }
   };
 
-  const renderMessageItem = ({item}) => {
+  const renderMessageItem = ({item, index}) => {
     const handlePresMessage = () => {
       onPressMessage(item);
     };
 
     return (
-      <View style={styles.messageRow}>
-        <TouchableOpacity
-          onPress={handlePresMessage}
-          activeOpacity={0.8}
-          onLongPress={() => toggleDrop()}>
-          {renderMessageBody(item)}
-        </TouchableOpacity>
+      <View
+        style={[
+          styles.messageRow,
+          index === 2 ? styles.messageRowReceiver : styles.messageRowSender,
+        ]}>
+        {renderMessageBody(item, index, handlePresMessage)}
       </View>
     );
   };
 
+  const [modalText, toggleModalText] = useActionModal({
+    type: 'text',
+    isDark: true,
+  });
+
+  const [modalImage, toggleModalImage] = useActionModal({
+    type: 'image',
+    isDark: true,
+  });
+
+  const [modalLocation, toggleModalLocation] = useActionModal({
+    type: 'location',
+    isDark: true,
+  });
+
   return (
-    <FlatList
-      style={styles.container}
-      inverted
-      data={messages}
-      renderItem={renderMessageItem}
-      keyExtractor={keyExtractor}
-      keyboardShouldPersistTaps={'handled'}
-    />
+    <>
+      {modalText}
+      {modalLocation}
+      {modalImage}
+      <FlatList
+        style={styles.container}
+        inverted
+        data={messages}
+        renderItem={renderMessageItem}
+        keyExtractor={keyExtractor}
+        keyboardShouldPersistTaps={'handled'}
+      />
+    </>
   );
 };
 
@@ -116,20 +129,34 @@ MessageList.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: 'visible', // Prevents clipping on resize!
+    overflow: 'visible',
+  },
+  containerText: {
+    position: 'relative',
   },
   messageRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
     marginBottom: heightPercentageToDP(1.2),
     marginRight: widthPercentageToDP(3),
-    marginLeft: widthPercentageToDP(9),
+    marginLeft: widthPercentageToDP(3),
+  },
+  messageRowReceiver: {
+    justifyContent: 'flex-start',
+  },
+  messageRowSender: {
+    justifyContent: 'flex-end',
+  },
+  messageBubbleReceiver: {
+    backgroundColor: '#bdc3c7',
+  },
+  messageBubblesender: {
+    backgroundColor: 'rgb(16,135,255)',
   },
   messageBubble: {
     paddingVertical: heightPercentageToDP(1.5),
     paddingHorizontal: widthPercentageToDP(3),
-    backgroundColor: 'rgb(16,135,255)',
     borderRadius: 20,
+    maxWidth: 300,
   },
   text: {
     fontSize: responsiveFontSize(2),

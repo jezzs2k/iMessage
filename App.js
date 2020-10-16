@@ -16,7 +16,6 @@ import {
   CreateTextMessage,
 } from './utils/messaging/MessageUtils';
 import {useConfirmModal} from './components/Modal/useConfirmModal';
-import {useModalDropList} from './components/Modal/useModalDropList';
 
 const App = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
@@ -35,8 +34,12 @@ const App = () => {
 
   const [messages, setMessages] = useState([
     CreateImageMessage('https://unsplash.it/300/300'),
-    CreateTextMessage('World'),
-    CreateTextMessage('Hello'),
+    CreateTextMessage(
+      'TEX, viết không định dạng là TeX, là một hệ thống sắp chữ được viết bởi Donald Knuth và giới thiệu lần đầu vào năm 1978.',
+    ),
+    CreateTextMessage(
+      'LaTeX is not a stand-alone typesetting program in itself, but document preparation software that runs on top of Donald E. Knuth s TeX typesetting system. TeX distributions usually bundle together all the parts needed for a working TeX system and they generally add to this both configuration and maintenance utilities. Nowadays LaTeX, and many of the packages built on it, form an important component of any major TeX distribution.',
+    ),
     createLocationMessage({
       latitude: 37.78825,
       longitude: -122.4324,
