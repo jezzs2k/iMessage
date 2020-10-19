@@ -2,15 +2,11 @@ import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, View, TouchableOpacity, TextInput} from 'react-native';
 import PropTypes from 'prop-types';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import {responsiveFontSize, widthPercentageToDP} from '../../utils';
-
-const ToolbarButton = ({nameIcon, onPress}) => {
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.btnIcon}>
-      <EvilIcons name={nameIcon} size={30} color={'gray'} />
-    </TouchableOpacity>
-  );
-};
+import {
+  heightPercentageToDP,
+  responsiveFontSize,
+  widthPercentageToDP,
+} from '../../utils';
 
 const Toolbar = ({
   onSubmit,
@@ -21,6 +17,14 @@ const Toolbar = ({
 }) => {
   const [textInput, setText] = useState('');
   const refInput = useRef();
+
+  const ToolbarButton = ({nameIcon, onPress}) => {
+    return (
+      <TouchableOpacity onPress={onPress} style={styles.btnIcon}>
+        <EvilIcons name={nameIcon} size={30} color={'gray'} />
+      </TouchableOpacity>
+    );
+  };
 
   useEffect(() => {
     if (isFocused) {
@@ -59,12 +63,7 @@ const Toolbar = ({
           console.log('Image');
         }}
       />
-      <ToolbarButton
-        nameIcon={'location'}
-        onPress={() => {
-          console.log('Location');
-        }}
-      />
+      <ToolbarButton nameIcon={'location'} onPress={onPressLocation} />
       <View style={styles.inputContainer}>
         <TextInput
           ref={refInput}
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   toolbar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: heightPercentageToDP(1),
     paddingHorizontal: 10,
     paddingLeft: 16,
     backgroundColor: 'white',
@@ -101,13 +100,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.04)',
     borderRadius: 16,
-    paddingVertical: 4,
     paddingHorizontal: 12,
     backgroundColor: 'rgba(0,0,0,0.02)',
   },
   input: {
     flex: 1,
-    fontSize: responsiveFontSize(3),
+    fontSize: responsiveFontSize(2),
   },
 });
 
@@ -118,3 +116,5 @@ Toolbar.propTypes = {
   onPressCamera: PropTypes.func,
   onPressLocation: PropTypes.func,
 };
+
+export default Toolbar;

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
-import moment from 'moment';
 
 export const MessageShape = PropTypes.shape({
   id: PropTypes.string.isRequired,

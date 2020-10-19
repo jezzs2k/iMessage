@@ -7,6 +7,7 @@ import {
   BackHandler,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import GetLocation from 'react-native-get-location';
 
 import MessageList from './components/Message/MessageList';
 import Status from './components/Status';
@@ -16,9 +17,12 @@ import {
   CreateTextMessage,
 } from './utils/messaging/MessageUtils';
 import {useConfirmModal} from './components/Modal/useConfirmModal';
+import Toolbar from './components/Toolbar';
+import ImageGrid from './components/ImageGrid';
 
 const App = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
+  const [isInputFocused, setInputFocused] = useState(false);
 
   useEffect(() => {
     const subcribe = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -31,6 +35,32 @@ const App = () => {
 
     return () => subcribe.remove();
   }, [fullScreenImageUri]);
+
+  const handlePressToolbarCamera = () => {};
+
+  const handlePressToolbarLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(({latitude, longitude}) => {
+        setMessages((messages) => [
+          createLocationMessage({latitude, longitude}),
+          ...messages,
+        ]);
+      })
+      .catch((error) => {
+        console.warn('error', error);
+      });
+  };
+
+  const handleChangeFocus = (isFocused) => {
+    setInputFocused(isFocused);
+  };
+
+  const handleSubmit = (text) => {
+    setMessages((messages) => [CreateTextMessage(text), ...messages]);
+  };
 
   const [messages, setMessages] = useState([
     CreateImageMessage('https://unsplash.it/300/300'),
@@ -50,6 +80,7 @@ const App = () => {
     switch (type) {
       case 'image':
         setImageUri(uri);
+        setInputFocused(false);
         break;
       default:
         break;
@@ -58,6 +89,20 @@ const App = () => {
 
   const dismissFullScreenImage = () => {
     setImageUri(null);
+  };
+
+  const renderToolbar = () => {
+    return (
+      <View style={styles.toolbar}>
+        <Toolbar
+          isFocused={isInputFocused}
+          onSubmit={handleSubmit}
+          onChangeFocus={handleChangeFocus}
+          onPressCamera={handlePressToolbarCamera}
+          onPressLocation={handlePressToolbarLocation}
+        />
+      </View>
+    );
   };
 
   const renderFullScreenImage = () => {
@@ -78,6 +123,14 @@ const App = () => {
     );
   };
 
+  const renderInputEditer = () => {
+    return (
+      <View style={styles.inputMethodEditer}>
+        <ImageGrid />
+      </View>
+    );
+  };
+
   const [modal, toggleModal] = useConfirmModal({
     title: 'Are you sure you want to delete your custom workout?',
     onTopPress: () => {
@@ -92,7 +145,9 @@ const App = () => {
       {modal}
       <Status />
       <MessageList messages={messages} onPressMessage={handlePressMessage} />
+      {renderToolbar()}
       {renderFullScreenImage()}
+      {renderInputEditer()}
     </>
   );
 };
@@ -111,6 +166,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  toolbar: {},
+  inputMethodEditer: {},
 });
 
 export default App;
