@@ -20,7 +20,9 @@ const Grid = ({
     return renderItem({...info, size, marginLeft, marginTop});
   };
 
-  return <FlatList {...props} renderItem={renderGridItem} horizontal />;
+  return (
+    <FlatList {...props} renderItem={renderGridItem} numColumns={numColumns} />
+  );
 };
 
 Grid.propTypes = {
