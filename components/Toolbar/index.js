@@ -57,12 +57,7 @@ const Toolbar = ({
 
   return (
     <View style={styles.toolbar}>
-      <ToolbarButton
-        nameIcon={'camera'}
-        onPress={() => {
-          console.log('Image');
-        }}
-      />
+      <ToolbarButton nameIcon={'camera'} onPress={onPressCamera} />
       <ToolbarButton nameIcon={'location'} onPress={onPressLocation} />
       <View style={styles.inputContainer}>
         <TextInput

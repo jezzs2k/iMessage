@@ -8,24 +8,17 @@ import Grid from './Grid';
 
 const keyExtractor = ({uri}) => uri;
 
-const ImageGrid = () => {
+const ImageGrid = ({onPressImage}) => {
   const [images, setImages] = useState([]);
-  const [hasNextPage, setNextPage] = useState(null);
-  const [endCursor, setEndCursor] = useState(null);
   const [cursor, setCursor] = useState(null);
-  let loading = false;
 
+  let loading = false;
+  
   useEffect(() => {
     getImages();
   }, []);
 
-  useEffect(() => {
-    if (cursor) {
-      getNextImage(cursor);
-    }
-  }, [cursor]);
-
-  const getNextImage = () => {
+  const getNextImage = (cursor) => {
     if (!cursor) {
       return;
     }
@@ -35,11 +28,13 @@ const ImageGrid = () => {
 
   const getImages = async (after) => {
     const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
     if (loading) {
       return;
     }
 
     loading = true;
+
 
     if (status !== 'granted') {
       console.log('Camera roll permission denied');
@@ -56,12 +51,10 @@ const ImageGrid = () => {
       page_info: {has_next_page, end_cursor},
     } = results;
 
-    has_next_page && setNextPage(has_next_page);
-    end_cursor && setEndCursor(end_cursor);
-
-    setCursor(has_next_page ? end_cursor : null);
-
     const loadedImages = edges.map((item) => item.node.image);
+
+    setCursor(has_next_page ? end_cursor : null)
+    loading = false;
     setImages(images.concat(loadedImages));
   };
 
@@ -73,14 +66,20 @@ const ImageGrid = () => {
       marginTop,
     };
 
-    return <Image source={{uri}} style={style} />;
+    return <TouchableOpacity 
+              activeOpacity={0.75}
+              onPress={() => onPressImage(uri)}
+              style={style}>
+            <Image source={{uri}} style={style} />
+           </TouchableOpacity> ;
   };
   return (
     <Grid
       data={images}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
-      onEndReached={getNextImage()}
+      onEndReached={() => getNextImage(cursor)}
+      onEndReachedThreshold={0.5}
       style={styles.image}
     />
   );

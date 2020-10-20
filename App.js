@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -23,6 +23,7 @@ import ImageGrid from './components/ImageGrid';
 const App = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
   const [isInputFocused, setInputFocused] = useState(false);
+  const [isChooseMedia, setChooseMedia] = useState(false);
 
   useEffect(() => {
     const subcribe = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -36,7 +37,9 @@ const App = () => {
     return () => subcribe.remove();
   }, [fullScreenImageUri]);
 
-  const handlePressToolbarCamera = () => {};
+  const handlePressToolbarCamera = () => {
+    setChooseMedia(!isChooseMedia);
+  };
 
   const handlePressToolbarLocation = () => {
     GetLocation.getCurrentPosition({
@@ -56,10 +59,15 @@ const App = () => {
 
   const handleChangeFocus = (isFocused) => {
     setInputFocused(isFocused);
+    setChooseMedia(false);
   };
 
   const handleSubmit = (text) => {
     setMessages((messages) => [CreateTextMessage(text), ...messages]);
+  };
+
+  const handleGetImage = (uri) => {
+    setMessages((messages) => [CreateImageMessage(uri), ...messages]);
   };
 
   const [messages, setMessages] = useState([
@@ -81,6 +89,7 @@ const App = () => {
       case 'image':
         setImageUri(uri);
         setInputFocused(false);
+        setChooseMedia(false);
         break;
       default:
         break;
@@ -126,7 +135,7 @@ const App = () => {
   const renderInputEditer = () => {
     return (
       <View style={styles.inputMethodEditer}>
-        <ImageGrid />
+        <ImageGrid onPressImage={handleGetImage} />
       </View>
     );
   };
@@ -147,7 +156,7 @@ const App = () => {
       <MessageList messages={messages} onPressMessage={handlePressMessage} />
       {renderToolbar()}
       {renderFullScreenImage()}
-      {renderInputEditer()}
+      {isChooseMedia && renderInputEditer()}
     </>
   );
 };
