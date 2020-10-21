@@ -11,6 +11,7 @@ export const useActionModal = ({
   isDark = false,
   onModalHide = undefined,
   onModalShow = undefined,
+  pressRemoveMessage,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -26,9 +27,9 @@ export const useActionModal = ({
     setIsVisible(!isVisible);
   }, [isVisible]);
 
-  const ActionItem = ({nameIcon, titleIcon, isDark}) => {
+  const ActionItem = ({nameIcon, titleIcon, isDark, onPress}) => {
     return (
-      <TouchableOpacity style={styles.iconContainer}>
+      <TouchableOpacity style={styles.iconContainer} onPress={onPress}>
         <MaterialIcons
           name={nameIcon}
           size={30}
@@ -40,6 +41,7 @@ export const useActionModal = ({
       </TouchableOpacity>
     );
   };
+
 
   const renderContentBar = () => {
     switch (type) {

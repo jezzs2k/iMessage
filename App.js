@@ -136,7 +136,10 @@ const App = () => {
   const renderInputEditer = () => {
     return (
       <View style={styles.inputMethodEditer}>
-        {CusomImagePicker({onPressTakePhoto: handlePickerImage})}
+        {CusomImagePicker({
+          onPressTakePhoto: handlePickerImage,
+          setChooseMedia: setChooseMedia,
+        })}
         <ImageGrid onPressImage={handlePickerImage} />
       </View>
     );

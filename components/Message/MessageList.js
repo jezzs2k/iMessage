@@ -18,7 +18,7 @@ import {
 } from '../../utils';
 import {useActionModal} from '../Modal/useActionModal';
 
-const MessageList = ({messages, onPressMessage}) => {
+const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
   const keyExtractor = (item) => item.id.toString();
 
   const renderMessageBody = (item, condition, handlePresMessage) => {
@@ -91,16 +91,19 @@ const MessageList = ({messages, onPressMessage}) => {
   const [modalText, toggleModalText] = useActionModal({
     type: 'text',
     isDark: true,
+    pressRemoveMessage,
   });
 
   const [modalImage, toggleModalImage] = useActionModal({
     type: 'image',
     isDark: true,
+    pressRemoveMessage,
   });
 
   const [modalLocation, toggleModalLocation] = useActionModal({
     type: 'location',
     isDark: true,
+    pressRemoveMessage: pressRemoveMessage,
   });
 
   return (

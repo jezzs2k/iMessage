@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 
 export const CusomImagePicker = ({
   onPressTakePhoto,
+  setChooseMedia,
   itemMargin = StyleSheet.hairlineWidth,
   numColumns = 4,
 }) => {
@@ -38,6 +39,7 @@ export const CusomImagePicker = ({
       return;
     }
 
+    setChooseMedia(false);
     onPressTakePhoto(result?.uri);
   };
 
