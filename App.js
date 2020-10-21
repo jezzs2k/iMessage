@@ -19,6 +19,7 @@ import {
 import {useConfirmModal} from './components/Modal/useConfirmModal';
 import Toolbar from './components/Toolbar';
 import ImageGrid from './components/ImageGrid';
+import {CusomImagePicker} from './components/CustomImagePicker';
 
 const App = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
@@ -66,7 +67,7 @@ const App = () => {
     setMessages((messages) => [CreateTextMessage(text), ...messages]);
   };
 
-  const handleGetImage = (uri) => {
+  const handlePickerImage = (uri) => {
     setMessages((messages) => [CreateImageMessage(uri), ...messages]);
   };
 
@@ -135,7 +136,8 @@ const App = () => {
   const renderInputEditer = () => {
     return (
       <View style={styles.inputMethodEditer}>
-        <ImageGrid onPressImage={handleGetImage} />
+        {CusomImagePicker({onPressTakePhoto: handlePickerImage})}
+        <ImageGrid onPressImage={handlePickerImage} />
       </View>
     );
   };
@@ -176,7 +178,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   toolbar: {},
-  inputMethodEditer: {},
+  inputMethodEditer: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+  },
 });
 
 export default App;

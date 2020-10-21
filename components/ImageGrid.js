@@ -13,17 +13,17 @@ const ImageGrid = ({onPressImage}) => {
   const [cursor, setCursor] = useState(null);
 
   let loading = false;
-  
+
   useEffect(() => {
     getImages();
   }, []);
 
-  const getNextImage = (cursor) => {
-    if (!cursor) {
+  const getNextImage = (cursorLocal) => {
+    if (!cursorLocal) {
       return;
     }
 
-    getImages(cursor);
+    getImages(cursorLocal);
   };
 
   const getImages = async (after) => {
@@ -34,7 +34,6 @@ const ImageGrid = ({onPressImage}) => {
     }
 
     loading = true;
-
 
     if (status !== 'granted') {
       console.log('Camera roll permission denied');
@@ -53,12 +52,12 @@ const ImageGrid = ({onPressImage}) => {
 
     const loadedImages = edges.map((item) => item.node.image);
 
-    setCursor(has_next_page ? end_cursor : null)
+    setCursor(has_next_page ? end_cursor : null);
     loading = false;
     setImages(images.concat(loadedImages));
   };
 
-  const renderItem = ({item: {uri}, size, marginTop, marginLeft}) => {
+  const renderItem = ({item: {uri}, size, marginTop, marginLeft, index}) => {
     const style = {
       width: size,
       height: size,
@@ -66,12 +65,11 @@ const ImageGrid = ({onPressImage}) => {
       marginTop,
     };
 
-    return <TouchableOpacity 
-              activeOpacity={0.75}
-              onPress={() => onPressImage(uri)}
-              style={style}>
-            <Image source={{uri}} style={style} />
-           </TouchableOpacity> ;
+    return (
+      <TouchableOpacity activeOpacity={0.75} onPress={() => onPressImage(uri)}>
+        <Image source={{uri}} style={style} />
+      </TouchableOpacity>
+    );
   };
   return (
     <Grid
