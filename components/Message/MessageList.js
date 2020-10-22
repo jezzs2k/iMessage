@@ -103,7 +103,7 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
   const [modalLocation, toggleModalLocation] = useActionModal({
     type: 'location',
     isDark: true,
-    pressRemoveMessage: pressRemoveMessage,
+    pressRemoveMessage,
   });
 
   return (
@@ -126,6 +126,7 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
 MessageList.propTypes = {
   messages: PropTypes.arrayOf(MessageShape).isRequired,
   onPressMessage: PropTypes.func,
+  pressRemoveMessage: PropTypes.func,
 };
 
 const styles = StyleSheet.create({

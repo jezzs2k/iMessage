@@ -14,10 +14,11 @@ export const useActionModal = ({
   pressRemoveMessage,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [itemData, setItemData] = useState(null);
 
   const toggleModal = useCallback(
     (data) => {
-      console.log(data);
+      setItemData(data);
       setIsVisible(!isVisible);
     },
     [isVisible],
@@ -42,6 +43,10 @@ export const useActionModal = ({
     );
   };
 
+  const handleRemoveMessage = () => {
+    pressRemoveMessage(itemData);
+    setIsVisible(false);
+  };
 
   const renderContentBar = () => {
     switch (type) {
@@ -63,6 +68,7 @@ export const useActionModal = ({
               nameIcon={'delete'}
               titleIcon={'Remove'}
               isDark={isDark}
+              onPress={handleRemoveMessage}
             />
           </>
         );
@@ -84,6 +90,7 @@ export const useActionModal = ({
               nameIcon={'delete'}
               titleIcon={'Remove'}
               isDark={isDark}
+              onPress={handleRemoveMessage}
             />
           </>
         );
@@ -106,6 +113,7 @@ export const useActionModal = ({
               nameIcon={'delete'}
               titleIcon={'Remove'}
               isDark={isDark}
+              onPress={handleRemoveMessage}
             />
           </>
         );

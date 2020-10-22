@@ -154,11 +154,19 @@ const App = () => {
     isDark: false,
   });
 
+  const handleRemoveMessage = (item) => {
+    setMessages((mes) => mes.filter((i) => i.id !== item.id));
+  };
+
   return (
     <>
       {modal}
       <Status />
-      <MessageList messages={messages} onPressMessage={handlePressMessage} />
+      <MessageList
+        messages={messages}
+        onPressMessage={handlePressMessage}
+        pressRemoveMessage={handleRemoveMessage}
+      />
       {renderToolbar()}
       {renderFullScreenImage()}
       {isChooseMedia && renderInputEditer()}
