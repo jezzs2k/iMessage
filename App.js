@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import GetLocation from 'react-native-get-location';
+import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 
 import MessageList from './components/Message/MessageList';
 import Status from './components/Status';
@@ -38,6 +39,18 @@ const App = () => {
     return () => subcribe.remove();
   }, [fullScreenImageUri]);
 
+  useEffect(() => {
+    ReceiveSharingIntent.getReceivedFiles(
+      (files) => {
+        console.log(files);
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+    return () => ReceiveSharingIntent.clearReceivedFiles();
+  }, []);
+
   const handlePressToolbarCamera = () => {
     setChooseMedia(!isChooseMedia);
   };
@@ -47,7 +60,7 @@ const App = () => {
       enableHighAccuracy: true,
       timeout: 15000,
     })
-      .then(({latitude, longitude}) => {
+      .then(({longitude, latitude}) => {
         setMessages((messages) => [
           createLocationMessage({latitude, longitude}),
           ...messages,

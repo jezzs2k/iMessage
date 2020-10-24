@@ -104,6 +104,12 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+// Read the API key from ./secure.properties into R.string.maps_api_key
+def secureProps = new Properties()
+if (file("../secure.properties").exists()) {
+        file("../secure.properties")?.withInputStream { secureProps.load(it) }
+}
+
 /**
  * The preferred build flavor of JavaScriptCore.
  *
