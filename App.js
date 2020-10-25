@@ -9,6 +9,7 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import GetLocation from 'react-native-get-location';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
+import {Provider} from 'react-redux';
 
 import MessageList from './components/Message/MessageList';
 import Status from './components/Status';
@@ -21,6 +22,8 @@ import {useConfirmModal} from './components/Modal/useConfirmModal';
 import Toolbar from './components/Toolbar';
 import ImageGrid from './components/ImageGrid';
 import {CusomImagePicker} from './components/CustomImagePicker';
+import store from './redux/store';
+import {connectToServer} from './utils/socketio';
 
 const App = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
@@ -77,6 +80,7 @@ const App = () => {
   };
 
   const handleSubmit = (text) => {
+    connectToServer();
     setMessages((messages) => [CreateTextMessage(text), ...messages]);
   };
 
@@ -172,7 +176,7 @@ const App = () => {
   };
 
   return (
-    <>
+    <Provider store={store}>
       {modal}
       <Status />
       <MessageList
@@ -183,7 +187,7 @@ const App = () => {
       {renderToolbar()}
       {renderFullScreenImage()}
       {isChooseMedia && renderInputEditer()}
-    </>
+    </Provider>
   );
 };
 

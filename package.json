@@ -10,14 +10,17 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.13.1",
     "@react-native-community/cameraroll": "^4.0.1",
     "@react-native-community/hooks": "^2.6.0",
     "@react-native-community/netinfo": "^5.9.7",
+    "axios": "^0.21.0",
     "expo": "^39.0.3",
     "expo-constants": "^9.2.0",
     "expo-image-picker": "^9.1.1",
     "expo-location": "^9.0.1",
     "expo-permissions": "^9.3.0",
+    "jwt-decode": "^3.0.0",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
@@ -33,6 +36,7 @@
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.3.1",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
