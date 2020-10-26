@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import {
   MESSAGE_SUCCESS,
   MESSAGE_ERROR,
@@ -10,7 +12,7 @@ export const loading = (loading) => {
 };
 
 export const success = (retrived) => {
-  return {type: MESSAGE_SUCCESS, retrived};
+  return {type: MESSAGE_SUCCESS, messages: retrived};
 };
 
 export const error = (error) => {
@@ -22,11 +24,15 @@ export const reset = () => {
 };
 
 export const retrive = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(loading(true));
-    dispatch(reset());
     try {
-      //fetch message
+      const res = await axios.get(
+        'http://d0482243d967.ngrok.io/messages/5f9622cec31e8b0917009e2a',
+      );
+
+      dispatch(success(res?.data?.data));
+      dispatch(loading(false));
     } catch (error) {
       dispatch(error(error));
       dispatch(loading(false));

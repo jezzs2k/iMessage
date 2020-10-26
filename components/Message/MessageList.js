@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
   Image,
@@ -19,10 +19,23 @@ import {
 import {useActionModal} from '../Modal/useActionModal';
 
 const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
-  const keyExtractor = (item) => item.id.toString();
+  const keyExtractor = (item) => item._id;
 
   const renderMessageBody = (item, condition, handlePresMessage) => {
-    const {type, text, uri, coordinate} = item;
+    let type = null;
+
+    const {media, text, location} = item?.message;
+
+    if (media) {
+      if (media['@type'] === 'jpg' || media['@type'] === 'png') {
+        type = 'image';
+      } else {
+        type = 'location';
+      }
+    } else {
+      type = 'text';
+    }
+
     switch (type) {
       case 'text':
         return (
@@ -30,12 +43,10 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
             onPress={handlePresMessage}
             activeOpacity={0.8}
             onLongPress={() => toggleModalText(item)}>
-            {true && (
+            {item?.replyMessId?.message && (
               <View style={[styles.messageBubble, styles.messageReply]}>
                 <Text style={styles.text}>
-                  {
-                    'textReply vu thanh hieu make design message, asd i want to fade you'
-                  }
+                  {item?.replyMessId?.message?.text}
                 </Text>
               </View>
             )}
@@ -56,7 +67,7 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
             onPress={handlePresMessage}
             activeOpacity={0.8}
             onLongPress={() => toggleModalImage(item)}>
-            <Image style={styles.image} source={{uri}} />
+            <Image style={styles.image} source={{uri: media?.url}} />
           </TouchableOpacity>
         );
       case 'location':
@@ -68,11 +79,11 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
             <MapView
               style={styles.map}
               initialRegion={{
-                ...coordinate,
+                ...location,
                 latitudeDelta: 0.08,
                 longitudeDelta: 0.04,
               }}>
-              <MapView.Marker coordinate={coordinate} />
+              <MapView.Marker coordinate={location} />
             </MapView>
           </TouchableOpacity>
         );
@@ -116,19 +127,20 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
   });
 
   return (
-    <>
-      {modalText}
-      {modalLocation}
-      {modalImage}
-      <FlatList
-        style={styles.container}
-        inverted
-        data={messages}
-        renderItem={renderMessageItem}
-        keyExtractor={keyExtractor}
-        keyboardShouldPersistTaps={'handled'}
-      />
-    </>
+    messages.length > 0 && (
+      <>
+        {modalText}
+        {modalLocation}
+        {modalImage}
+        <FlatList
+          style={styles.container}
+          data={messages}
+          renderItem={renderMessageItem}
+          keyExtractor={keyExtractor}
+          keyboardShouldPersistTaps={'handled'}
+        />
+      </>
+    )
   );
 };
 
