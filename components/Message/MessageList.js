@@ -30,6 +30,15 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
             onPress={handlePresMessage}
             activeOpacity={0.8}
             onLongPress={() => toggleModalText(item)}>
+            {true && (
+              <View style={[styles.messageBubble, styles.messageReply]}>
+                <Text style={styles.text}>
+                  {
+                    'textReply vu thanh hieu make design message, asd i want to fade you'
+                  }
+                </Text>
+              </View>
+            )}
             <View
               style={[
                 styles.messageBubble,
@@ -160,6 +169,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthPercentageToDP(3),
     borderRadius: 20,
     maxWidth: 300,
+  },
+  messageReply: {
+    backgroundColor: '#1e272e',
+    borderRadius: 20,
+    top: 8,
   },
   text: {
     fontSize: responsiveFontSize(2),
