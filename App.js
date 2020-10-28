@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
 
@@ -7,6 +7,10 @@ import {connectToServer} from './utils/socketio';
 import Messages from './components/Message/Messages';
 
 const App = () => {
+  useEffect(() => {
+    console.log('Connect to server');
+    connectToServer();
+  }, []);
   return <Provider store={store}>{<Messages />}</Provider>;
 };
 

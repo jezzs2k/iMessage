@@ -21,8 +21,15 @@ import {useConfirmModal} from '../Modal/useConfirmModal';
 import Toolbar from '../Toolbar';
 import ImageGrid from '../ImageGrid';
 import {CusomImagePicker} from '../CustomImagePicker';
-import {retrive} from '../../redux/action/chat/message';
+import {reset, retrive} from '../../redux/action/chat/message';
 import {retrived as sendRetrived} from '../../redux/action/chat/send';
+import {
+  createNewRoom,
+  sendMess,
+  realTimeReveiverMess,
+} from '../../utils/socketio';
+
+let conversationId = null;
 
 const Messages = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
@@ -35,6 +42,12 @@ const Messages = () => {
   const retrived = useSelector((state) => state.chat.message.retrived);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('create new room');
+    conversationId = `${Math.random() * 1000}`;
+    createNewRoom(conversationId);
+  }, []);
 
   useEffect(() => {
     dispatch(retrive());
@@ -70,9 +83,14 @@ const Messages = () => {
 
   useEffect(() => {
     if (retrivedSendMess) {
-      dispatch(retrive());
+      // dispatch(retrive());
+      console.log('send Success');
     }
   }, [retrivedSendMess, dispatch]);
+
+  useEffect(() => {
+    realTimeReveiverMess(() => dispatch(retrive()));
+  }, [dispatch]);
 
   const handlePressToolbarCamera = () => {
     setChooseMedia(!isChooseMedia);
@@ -110,6 +128,8 @@ const Messages = () => {
     };
 
     dispatch(sendRetrived(value));
+    value.conversationId = conversationId;
+    sendMess(value);
   };
 
   const handlePickerImage = (uri) => {

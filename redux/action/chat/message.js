@@ -28,7 +28,7 @@ export const retrive = () => {
     dispatch(loading(true));
     try {
       const res = await axios.get(
-        'http://d0482243d967.ngrok.io/messages/5f9622cec31e8b0917009e2a',
+        'http://392310a9bd02.ngrok.io/messages/5f9622cec31e8b0917009e2a',
       );
 
       dispatch(success(res?.data?.data));
