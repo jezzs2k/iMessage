@@ -29,7 +29,7 @@ import {
   realTimeReveiverMess,
 } from '../../utils/socketio';
 
-let conversationId = null;
+let conversationId = 'vuthanhhieu';
 
 const Messages = () => {
   const [fullScreenImageUri, setImageUri] = useState(null);
@@ -39,23 +39,25 @@ const Messages = () => {
 
   const loadingMess = useSelector((state) => state.chat.message.loading);
   const retrivedSendMess = useSelector((state) => state.chat.send.retrived);
-  const retrived = useSelector((state) => state.chat.message.retrived);
+  const retrivedMess = useSelector((state) => state.chat.message.retrived);
+  const user = useSelector((state) => state?.user?.demo?.retrived);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('create new room');
-    conversationId = `${Math.random() * 1000}`;
     createNewRoom(conversationId);
   }, []);
 
   useEffect(() => {
-    dispatch(retrive());
-  }, [dispatch]);
+    if (user && Object.entries(user).length > 0) {
+      dispatch(retrive(user?._id));
+    }
+  }, [dispatch, user]);
 
   useEffect(() => {
-    retrived && setMessages(retrived?.messages);
-  }, [retrived]);
+    retrivedMess && setMessages(retrivedMess?.messages);
+  }, [retrivedMess]);
 
   useEffect(() => {
     const subcribe = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -69,21 +71,20 @@ const Messages = () => {
     return () => subcribe.remove();
   }, [fullScreenImageUri]);
 
-  useEffect(() => {
-    ReceiveSharingIntent.getReceivedFiles(
-      (files) => {
-        console.log(files);
-      },
-      (error) => {
-        console.log(error);
-      },
-    );
-    return () => ReceiveSharingIntent.clearReceivedFiles();
-  }, []);
+  // useEffect(() => {
+  //   ReceiveSharingIntent.getReceivedFiles(
+  //     (files) => {
+  //       console.log(files);
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     },
+  //   );
+  //   return () => ReceiveSharingIntent.clearReceivedFiles();
+  // }, []);
 
   useEffect(() => {
     if (retrivedSendMess) {
-      // dispatch(retrive());
       console.log('send Success');
     }
   }, [retrivedSendMess, dispatch]);
@@ -102,10 +103,11 @@ const Messages = () => {
       timeout: 15000,
     })
       .then(({longitude, latitude}) => {
-        setMessages((messages) => [
-          createLocationMessage({latitude, longitude}),
-          ...messages,
-        ]);
+        console.log(longitude, latitude);
+        // setMessages((messages) => [
+        //   createLocationMessage({latitude, longitude}),
+        //   ...messages,
+        // ]);
       })
       .catch((error) => {
         console.warn('error', error);
@@ -119,10 +121,10 @@ const Messages = () => {
 
   const handleSubmit = (text) => {
     const value = {
-      receiverUser: '5f92eb503264a7c2a9f99c55',
+      receiverUser: '5f94109b21402f00445f72e9',
       message: {
         text: text,
-        senderUser: '5f92eb403264a7c2a9f99c54',
+        senderUser: user?._id,
       },
       conversationId: '5f9622cec31e8b0917009e2a',
     };
@@ -133,7 +135,7 @@ const Messages = () => {
   };
 
   const handlePickerImage = (uri) => {
-    setMessages((messages) => [CreateImageMessage(uri), ...messages]);
+    // setMessages((messages) => [CreateImageMessage(uri), ...messages]);
   };
 
   const handlePressMessage = ({uri, type}) => {
@@ -196,24 +198,15 @@ const Messages = () => {
     );
   };
 
-  const [modal, toggleModal] = useConfirmModal({
-    title: 'Are you sure you want to delete your custom workout?',
-    onTopPress: () => {
-      console.log('Hieu Confirm');
-    },
-    onBottomPress: () => {},
-    isDark: false,
-  });
-
   const handleRemoveMessage = (item) => {
     setMessages((mes) => mes.filter((i) => i._id !== item._id));
   };
 
   return (
     <>
-      {modal}
       <Status />
       <MessageList
+        user={user}
         messages={messages}
         onPressMessage={handlePressMessage}
         pressRemoveMessage={handleRemoveMessage}

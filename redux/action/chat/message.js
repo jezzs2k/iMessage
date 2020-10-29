@@ -23,12 +23,12 @@ export const reset = () => {
   return {type: MESSAGE_RESET};
 };
 
-export const retrive = () => {
+export const retrive = (id) => {
   return async (dispatch) => {
     dispatch(loading(true));
     try {
       const res = await axios.get(
-        'http://392310a9bd02.ngrok.io/messages/5f9622cec31e8b0917009e2a',
+        `http://c7f4c1f5a2cb.ngrok.io/messages/${id}`,
       );
 
       dispatch(success(res?.data?.data));

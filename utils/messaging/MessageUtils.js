@@ -3,7 +3,7 @@ import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 
 export const MessageShape = PropTypes.shape({
-  id: PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['text', 'image', 'location']),
   text: PropTypes.string,
   uri: PropTypes.string,

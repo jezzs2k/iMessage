@@ -23,7 +23,7 @@ export const retrived = (value) => {
     dispatch(loading(true));
     try {
       const res = await axios.post(
-        'http://392310a9bd02.ngrok.io/messages',
+        'http://c7f4c1f5a2cb.ngrok.io/messages',
         value,
       );
 

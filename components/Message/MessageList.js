@@ -18,7 +18,7 @@ import {
 } from '../../utils';
 import {useActionModal} from '../Modal/useActionModal';
 
-const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
+const MessageList = ({messages, onPressMessage, pressRemoveMessage, user}) => {
   const keyExtractor = (item) => item._id;
 
   const renderMessageBody = (item, condition, handlePresMessage) => {
@@ -53,9 +53,9 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
             <View
               style={[
                 styles.messageBubble,
-                condition === 2
-                  ? styles.messageBubbleReceiver
-                  : styles.messageBubblesender,
+                condition
+                  ? styles.messageBubblesender
+                  : styles.messageBubbleReceiver,
               ]}>
               <Text style={styles.text}>{text}</Text>
             </View>
@@ -93,6 +93,7 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
   };
 
   const renderMessageItem = ({item, index}) => {
+    const isCurrentUser = item?.message?.senderUser?._id === user._id;
     const handlePresMessage = () => {
       onPressMessage(item);
     };
@@ -101,9 +102,9 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
       <View
         style={[
           styles.messageRow,
-          index === 2 ? styles.messageRowReceiver : styles.messageRowSender,
+          isCurrentUser ? styles.messageRowSender : styles.messageRowReceiver,
         ]}>
-        {renderMessageBody(item, index, handlePresMessage)}
+        {renderMessageBody(item, isCurrentUser, handlePresMessage)}
       </View>
     );
   };
@@ -134,6 +135,7 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage}) => {
         {modalImage}
         <FlatList
           style={styles.container}
+          inverted
           data={messages}
           renderItem={renderMessageItem}
           keyExtractor={keyExtractor}
