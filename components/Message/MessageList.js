@@ -128,7 +128,7 @@ const MessageList = ({messages, onPressMessage, pressRemoveMessage, user}) => {
   });
 
   return (
-    messages.length > 0 && (
+    messages.length > -1 && (
       <>
         {modalText}
         {modalLocation}
@@ -156,9 +156,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     overflow: 'visible',
+    height: 500,
   },
   containerText: {
     position: 'relative',
+    height: 500,
   },
   messageRow: {
     flexDirection: 'row',

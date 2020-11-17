@@ -34,8 +34,8 @@ const Demo = () => {
 
   return (
     <>
-      {!isLogin && <SignIn handleSubmit={handleLogin} />}
-      {isLogin && <Messages />}
+      {/* {!isLogin && <SignIn handleSubmit={handleLogin} />} */}
+      {!isLogin && <Messages />}
     </>
   );
 };
